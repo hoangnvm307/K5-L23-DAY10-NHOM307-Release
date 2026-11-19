@@ -1,0 +1,11 @@
+image,type,annotator,reviewer,action
+000000000285,bbox_drift,A03,Q01,Gán lại nhãn detection rồi chuyển người kiểm
+000000001353,bbox_drift,A03,Q01,Gán lại nhãn detection rồi chuyển người kiểm
+000000001993,missing_image,A03,Q01,Khôi phục file ảnh và kiểm lại nhãn
+000000005586,missing_image,A02,Q03,Khôi phục file ảnh và kiểm lại nhãn
+000000007818,class_swap,A04,Q03,Gán lại nhãn detection rồi chuyển người kiểm
+000000010092,duplicate_box,A01,Q01,Gán lại nhãn detection rồi chuyển người kiểm
+000000011511,class_swap,A01,Q01,Gán lại nhãn detection rồi chuyển người kiểm
+000000013729,bbox_out_of_bounds,A03,Q03,Gán lại nhãn detection rồi chuyển người kiểm
+000000016502,class_swap,A05,Q02,Gán lại nhãn detection rồi chuyển người kiểm
+000000017899,duplicate_box,A05,Q03,Gán lại nhãn detection rồi chuyển người kiểm

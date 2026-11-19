@@ -30,8 +30,15 @@ Changelog luyện tập đổi quy tắc gán box lớp `cup` từ v1.2 sang v1.
 
 `python -X utf8 scripts/run_lab.py` tạo xong lô nhưng tiến trình con của script gặp lỗi mã hóa CP1252 khi in tiếng Việt qua pipe. PowerShell có thể đặt `$env:PYTHONUTF8='1'` trước khi chạy để các tiến trình Python con nhận cùng chế độ. Với lô này, các event inject và train được ghi bằng lệnh lineage gốc cho release đã tạo, sau đó mới ghi quyết định HOLD.
 
+Lô v1 của bài được tạo bằng Python trên Windows. Khi tái tạo để chấm, dùng Python trên Windows vì trình tạo lô tính release ID từ bytes JSON, bao gồm ký tự xuống dòng của hệ điều hành. Git được cấu hình theo đường dẫn để giữ nguyên bytes của thư mục bàn giao khi checkout.
+
 ## 7. Số liệu sau review
 
 <!-- review-result:start -->
-Chờ phiếu xem ảnh của người làm để chốt số liệu và bản bàn giao.
+- Review luyện tập gồm 7 ứng viên. Xác nhận 6 và bác 1.
+- F1 tổng ≈ 0.9 · lỗi luật ≈ 1.0 · lỗi gán nhãn ≈ 0.8
+- Truy vết F1 ≈ tier_a 1.0 · tier_b 1.0 · notify 1.0
+- QC v1 là 16/250 = 6,4%. Hold — 6,4% vượt ngưỡng 2%.
+- V2 giữ 240 ảnh và 1656 nhãn detection, chuyển 10 ảnh sang rework. Lô cha là lab250_66363156fdbb.
+- Kiểm định dạng bàn giao của lab đạt 17/17 mục.
 <!-- review-result:end -->

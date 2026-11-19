@@ -1,0 +1,8 @@
+image,type,verdict,note
+img_0015,category_swap,confirmed," Vùng giữa tiền cảnh là ca nhựa màu xanh có quai, miệng rộng và thân liền đáy. Panoptic gán wine glass; detection ghi cup."
+img_0043,category_swap,confirmed, Vùng dưới áo vàng là cốc thủy tinh thành đứng in chữ ở mép bàn. Detection ghi cup còn panoptic ghi bowl cho chính chiếc cốc.
+img_0053,class_swap,confirmed," Box bao người đội mũ, mặc áo khoác đỏ trắng, đang cầm máy ảnh trước gương. Detection ghi baseball glove, panoptic ghi person."
+img_0090,bbox_drift,confirmed, Box người cưỡi ngựa bị dịch xuống và sang phải. Phần mũ bảo hiểm trên mép ảnh và một phần người ở bên trái nằm ngoài box.
+img_0091,class_swap,confirmed," Vật trên đĩa là miếng bánh sô-cô-la hình nêm với các lớp bánh rõ ở mặt cắt. Detection gán donut, panoptic gán cake."
+img_0096,missing_box,confirmed," Lò nướng mở chiếm bên trái ảnh, thấy khoang lò, khay và cửa kính hạ xuống. Panoptic có oven nhưng detection thiếu box."
+img_0220,instance_merge,confirmed, Hai box đánh dấu hai người khác nhau trên vạch qua đường. Một người áo vàng gần giữa ảnh và một người xa hơn phía trên bị chung một segment.

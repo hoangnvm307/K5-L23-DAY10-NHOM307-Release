@@ -1,0 +1,2 @@
+# Giữ nguyên bytes của gói bàn giao để SHA-256 khớp sau khi checkout.
+submission/*/handover/** -text

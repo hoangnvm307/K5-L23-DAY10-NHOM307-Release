@@ -1,0 +1,8 @@
+image,type,verdict,note
+000000000285,bbox_drift,confirmed," Con gấu chiếm gần hết khung hình. Box lệch lên và sang phải, bỏ vùng thân dưới cùng một phần vai trái đang thấy rõ."
+000000001353,bbox_drift,confirmed," Box người phía trước bên trái toa đỏ bị dịch lên và sang phải, cắt phần áo khoác đen ở mép trái và sát thành toa."
+000000003501,bbox_drift,rejected," Hai phần bông cải trên và dưới bên trái bát đã có box riêng. Mask gom cả hai, nên box của phần dưới chỉ phủ một phần mask."
+000000007818,class_swap,confirmed," Vật cạnh bình hoa bên phải là ly có chân đang úp ngược, thấy rõ chân và đế tròn. Detection ghi bowl, panoptic ghi wine glass."
+000000011511,class_swap,confirmed," Vùng cạnh chân tượng bên phải là chiếc túi xách dựng trên nền, thấy miệng túi mở và một quai ở phía trên. Detection ghi backpack."
+000000015440,category_swap,confirmed," Vật là biển đỏ bát giác ghi STOP đặt trên cột. Detection ghi stop sign đúng, panoptic ghi book."
+000000016502,class_swap,confirmed," Trên tảng đá là con cừu lông dày màu kem, đầu sẫm. Detection ghi cow còn panoptic ghi sheep."

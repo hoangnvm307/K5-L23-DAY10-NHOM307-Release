@@ -1,44 +1,68 @@
 {
-  "errors": [
-    {
-      "type": "bbox_out_of_bounds",
-      "target": "000000013729"
-    },
-    {
-      "type": "duplicate_box",
-      "target": "000000010092"
-    },
-    {
-      "type": "duplicate_box",
-      "target": "000000017899"
-    },
-    {
-      "type": "guideline_mismatch",
-      "target": "000000007511"
-    },
-    {
-      "type": "guideline_mismatch",
-      "target": "000000025096"
-    },
-    {
-      "type": "missing_image",
-      "target": "000000001993"
-    },
-    {
-      "type": "missing_image",
-      "target": "000000005586"
-    },
-    {
-      "type": "scene_leak",
-      "target": "scene_506"
-    },
-    {
-      "type": "thing_overlap",
-      "target": "000000000724"
-    },
-    {
-      "type": "wrong_hash",
-      "target": "000000004495"
-    }
-  ]
+ "errors": [
+  {
+   "type": "bbox_drift",
+   "target": "000000000285"
+  },
+  {
+   "type": "bbox_drift",
+   "target": "000000001353"
+  },
+  {
+   "type": "bbox_out_of_bounds",
+   "target": "000000013729"
+  },
+  {
+   "type": "category_swap",
+   "target": "000000015440"
+  },
+  {
+   "type": "class_swap",
+   "target": "000000007818"
+  },
+  {
+   "type": "class_swap",
+   "target": "000000011511"
+  },
+  {
+   "type": "class_swap",
+   "target": "000000016502"
+  },
+  {
+   "type": "duplicate_box",
+   "target": "000000010092"
+  },
+  {
+   "type": "duplicate_box",
+   "target": "000000017899"
+  },
+  {
+   "type": "guideline_mismatch",
+   "target": "000000007511"
+  },
+  {
+   "type": "guideline_mismatch",
+   "target": "000000025096"
+  },
+  {
+   "type": "missing_image",
+   "target": "000000001993"
+  },
+  {
+   "type": "missing_image",
+   "target": "000000005586"
+  },
+  {
+   "type": "scene_leak",
+   "target": "scene_506"
+  },
+  {
+   "type": "thing_overlap",
+   "target": "000000000724"
+  },
+  {
+   "type": "wrong_hash",
+   "target": "000000004495"
+  }
+ ]
 }
