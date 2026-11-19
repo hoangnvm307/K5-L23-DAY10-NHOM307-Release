@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review nhãn ảnh · Nhóm 307</title>
+<style>
+  :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; color: #192b3d; background: #f0f4f7 }
+  body { max-width: 1100px; margin: 24px auto; padding: 0 16px }
+  h1 { margin: 0; font-size: 1.8rem }
+  h2 { margin: 0 0 .4rem; font-size: 1.15rem }
+  .controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0 }
+  .card { background: white; padding: 16px; border: 1px solid #c9d6e0; border-radius: 12px }
+  .photo { width: 100%; max-height: 64vh; object-fit: contain; background: #15212d }
+  .photo svg { display: block; width: 100%; height: min(61vh, 630px) }
+  button, select, input, textarea { font: inherit; padding: 6px 9px }
+  button { color: #153044; background: white; border: 1px solid #849aad; border-radius: 6px; cursor: pointer }
+  button:disabled { opacity: .45; cursor: default }
+  #save { background: #174467; color: white; border-color: #174467 }
+  textarea { box-sizing: border-box; width: 100%; min-height: 76px }
+  .det { color: #126a32 } .pan { color: #8c256c }
+  .muted { color: #42596e; margin: 6px 0 }
+</style>
+<h1 id="title">Review nhãn ảnh</h1>
+<p class="muted">Xem ảnh gốc và bật lớp phủ để kiểm tra vùng bất đồng. Ghi vật hoặc chi tiết thực sự thấy trong ảnh, ít nhất 20 ký tự.</p>
+<div class="controls">
+  <label>Người xem <input id="reviewer" autocomplete="name" placeholder="Họ và tên"></label>
+  <button id="prev">← Trước</button>
+  <label>Mục <select id="index"></select></label>
+  <button id="next">Tiếp →</button>
+  <span id="progress" role="status"></span>
+  <button id="save">Tải kết quả review</button>
+</div>
+<main class="card">
+  <h2 id="caseTitle"></h2>
+  <p id="details" class="muted"></p>
+  <div class="controls" id="overlays">
+    <label class="det"><input id="boxes" type="checkbox" checked> Box detection</label>
+    <label class="pan"><input id="mask" type="checkbox" checked> Mask panoptic</label>
+    <label><input id="crop" type="checkbox"> Phóng vùng ứng viên</label>
+  </div>
+  <div id="photo"></div>
+  <div id="suggestionBox" hidden>
+    <p id="suggestion" class="muted"></p>
+    <button id="applySuggestion">Đồng ý sau khi xem ảnh</button>
+  </div>
+  <div class="controls">
+    <select aria-label="Loại lỗi" id="type"></select>
+    <select aria-label="Kết luận" id="verdict"></select>
+  </div>
+  <label id="noteLabel">Quan sát từ ảnh <textarea id="note"></textarea></label>
+  <button id="face" hidden>Dùng ảnh này làm ví dụ khuôn mặt</button>
+</main>
+<script>
+const data = __REVIEW_DATA__;
+const get = id => document.getElementById(id);
+const labels = {
+  class_swap: 'class_swap · detection ghi sai lớp',
+  category_swap: 'category_swap · panoptic ghi sai lớp',
+  bbox_drift: 'bbox_drift · box detection lệch khỏi vật',
+  missing_box: 'missing_box · thiếu box detection',
+  instance_merge: 'instance_merge · hai vật chung một segment'
+};
+const storageKey = 'day10-review:' + data.lot + ':' + data.cases.map(item => item.id + item.image).join('|');
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch {}
+const state = Object.assign({reviewer: '', results: {}, face: ''}, saved);
+const needsFace = data.cases.some(item => item.kind === 'face');
+let index = 0;
+get('title').textContent += ' · ' + data.lot;
+get('reviewer').value = state.reviewer;
+
+function options(select, items) {
+  select.replaceChildren(...items.map(([value, label]) => new Option(label, value)));
+}
+
+function persist() {
+  try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch {}
+}
+
+function resultReady(item) {
+  const result = state.results[item.id];
+  if (item.kind === 'face') return false;
+  if (!result || !result.verdict) return false;
+  if (item.kind === 'hash') return true;
+  return result.note.trim().length >= 20 && (result.verdict === 'rejected' || item.types.includes(result.type));
+}
+
+function refreshProgress() {
+  const required = data.cases.filter(item => item.kind !== 'face');
+  const finished = required.filter(resultReady).length;
+  get('progress').textContent = finished + '/' + required.length + ' mục'
+    + (needsFace ? ' · ảnh khuôn mặt ' + (state.face || 'chưa chọn') : '');
+  get('save').disabled = finished !== required.length || (needsFace && !state.face) || !state.reviewer.trim();
+}
+
+function svgElement(tag, attributes) {
+  const element = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [key, value] of Object.entries(attributes)) element.setAttribute(key, value);
+  return element;
+}
+
+function renderPhoto(item) {
+  const photo = get('photo');
+  const src = data.photos[item.image];
+  if (!src) {
+    photo.textContent = 'Không có file ảnh.';
+    return;
+  }
+  if (item.kind !== 'candidate') {
+    const img = new Image();
+    img.className = 'photo';
+    img.alt = item.image;
+    img.onerror = () => { photo.textContent = 'Trình duyệt không mở được ảnh.'; };
+    img.src = src;
+    photo.replaceChildren(img);
+    return;
+  }
+  const [width, height] = item.size;
+  let region = [0, 0, width, height];
+  if (get('crop').checked) {
+    const bounds = [item.segment.bbox, ...item.boxes.map(item => item.bbox)];
+    const x = Math.max(0, Math.min(...bounds.map(b => b[0])) - 18);
+    const y = Math.max(0, Math.min(...bounds.map(b => b[1])) - 18);
+    const right = Math.min(width, Math.max(...bounds.map(b => b[2])) + 18);
+    const bottom = Math.min(height, Math.max(...bounds.map(b => b[3])) + 18);
+    region = [x, y, right - x, bottom - y];
+  }
+  const svg = svgElement('svg', {viewBox: region.join(' '), role: 'img', 'aria-label': item.image});
+  svg.append(svgElement('image', {href: src, width, height}));
+  if (get('mask').checked) {
+    svg.append(svgElement('path', {d: item.mask, stroke: '#ff70dc', 'stroke-width': 1, opacity: .45}));
+    const [x, y, r, b] = item.segment.bbox;
+    svg.append(svgElement('rect', {x, y, width: r-x, height: b-y, fill: 'none', stroke: '#ff70dc', 'stroke-width': 1.6}));
+  }
+  if (get('boxes').checked) {
+    for (const box of item.boxes) {
+      const [x, y, r, b] = box.bbox;
+      svg.append(svgElement('rect', {x, y, width: r-x, height: b-y, fill: 'none', stroke: '#38ef78', 'stroke-width': 1.6}));
+    }
+  }
+  const panel = document.createElement('div');
+  panel.className = 'photo';
+  panel.append(svg);
+  photo.replaceChildren(panel);
+}
+
+function render() {
+  const item = data.cases[index];
+  get('prev').disabled = index === 0;
+  get('next').disabled = index >= data.cases.length - 1;
+  get('index').value = String(index);
+  if (!item) {
+    document.querySelector('main').textContent = 'Hàng đợi rỗng.';
+    refreshProgress();
+    return;
+  }
+  const result = state.results[item.id] || {};
+  const candidate = item.kind === 'candidate';
+  const face = item.kind === 'face';
+  const suggestion = data.suggestions[item.id];
+  get('caseTitle').textContent = item.image + ' · ' + (candidate ? 'đối chiếu nhãn' : face ? 'ví dụ bảo mật' : 'kiểm ảnh sai hash');
+  get('details').textContent = candidate
+    ? 'Detection: ' + (item.boxes.map(box => box.class + ' (dòng ' + box.line + ')').join(', ') || 'không có box tương ứng')
+      + ' · Panoptic: ' + item.segment.class + ' (segment ' + item.segment.id + ')'
+    : face ? 'Chọn một ảnh nếu bạn nhìn rõ khuôn mặt người.' : 'Kiểm tra ảnh có mở được, còn nguyên và đúng nội dung hay không.';
+  get('overlays').style.display = candidate ? '' : 'none';
+  get('type').hidden = !candidate;
+  get('verdict').hidden = face;
+  get('noteLabel').hidden = !candidate;
+  get('face').hidden = !face;
+  get('face').textContent = item.image === state.face ? 'Đã chọn ảnh này' : 'Dùng ảnh này làm ví dụ khuôn mặt';
+  if (candidate) {
+    options(get('type'), [['', 'Chọn loại nếu xác nhận'], ...item.types.map(type => [type, labels[type]])]);
+    get('type').value = result.type || (item.types.length === 1 ? item.type : '');
+    options(get('verdict'), [['', 'Chọn kết luận'], ['confirmed', 'Xác nhận lỗi'], ['rejected', 'Bác ứng viên']]);
+  } else {
+    options(get('verdict'), [['', 'Chọn kết luận'], ['intact', 'Ảnh mở được và đúng nội dung'], ['damaged', 'Ảnh hỏng hoặc sai nội dung']]);
+  }
+  get('verdict').value = result.verdict || '';
+  get('note').value = result.note || '';
+  get('suggestionBox').hidden = !suggestion;
+  get('suggestion').textContent = suggestion
+    ? 'Gợi ý AI · ' + (suggestion.verdict === 'rejected' ? 'Bác ứng viên' :
+      suggestion.type ? labels[suggestion.type] : suggestion.verdict === 'intact' ? 'Ảnh còn nguyên' : 'Ví dụ có khuôn mặt')
+      + ' · ' + suggestion.note
+    : '';
+  renderPhoto(item);
+  refreshProgress();
+}
+
+function record() {
+  const item = data.cases[index];
+  state.results[item.id] = {type: get('type').value, verdict: get('verdict').value, note: get('note').value};
+  persist();
+  refreshProgress();
+}
+
+function download(name, contents, mime) {
+  const url = URL.createObjectURL(new Blob([contents], {type: mime + ';charset=utf-8'}));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = name;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+get('save').onclick = () => {
+  const reviewed = data.cases.filter(item => item.kind === 'candidate').map(item => {
+    const {type, verdict, note} = state.results[item.id];
+    return {image: item.image, type: type || item.type, verdict, note: '[' + state.reviewer.trim() + '] ' + note.trim()};
+  });
+  const hashes = Object.fromEntries(data.cases.filter(item => item.kind === 'hash')
+    .map(item => [item.image, state.results[item.id].verdict]));
+  download(data.lot + '-review.json',
+    JSON.stringify({reviewed, hash_review: hashes, face_example: state.face}, null, 2) + '\n', 'application/json');
+};
+get('reviewer').oninput = event => { state.reviewer = event.target.value; persist(); refreshProgress(); };
+options(get('index'), data.cases.map((item, id) => [String(id), (id + 1) + ' · ' + item.image + ' · ' + (item.type || item.kind)]));
+get('index').onchange = event => { index = Number(event.target.value); render(); };
+get('prev').onclick = () => { index--; render(); };
+get('next').onclick = () => { index++; render(); };
+get('face').onclick = () => { state.face = data.cases[index].image; persist(); render(); };
+get('applySuggestion').onclick = () => {
+  const item = data.cases[index];
+  if (item.kind === 'face') {
+    get('face').click();
+    return;
+  }
+  const suggestion = data.suggestions[item.id];
+  if (item.kind === 'candidate') get('type').value = suggestion.type;
+  get('verdict').value = suggestion.verdict;
+  get('note').value = suggestion.note;
+  record();
+};
+for (const id of ['boxes', 'mask', 'crop']) get(id).onchange = () => renderPhoto(data.cases[index]);
+for (const id of ['type', 'verdict', 'note']) get(id).oninput = record;
+render();
+</script>
+</html>
