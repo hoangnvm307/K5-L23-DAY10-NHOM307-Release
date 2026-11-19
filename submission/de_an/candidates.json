@@ -1,0 +1,259 @@
+{
+  "candidates": [
+    {
+      "image": "img_0015",
+      "type": "class_swap",
+      "types": [
+        "class_swap",
+        "category_swap"
+      ],
+      "size": [
+        640,
+        425
+      ],
+      "segment": {
+        "id": 9112053,
+        "class": "wine glass",
+        "bbox": [
+          270,
+          292,
+          354,
+          420
+        ],
+        "area": 9559
+      },
+      "boxes": [
+        {
+          "line": 3,
+          "class": "cup",
+          "bbox": [
+            269.19,
+            291.98,
+            354.77,
+            420.34
+          ],
+          "iou": 0.979,
+          "mask_coverage": 1.0
+        }
+      ]
+    },
+    {
+      "image": "img_0043",
+      "type": "class_swap",
+      "types": [
+        "class_swap",
+        "category_swap"
+      ],
+      "size": [
+        640,
+        427
+      ],
+      "segment": {
+        "id": 12786940,
+        "class": "bowl",
+        "bbox": [
+          86,
+          358,
+          156,
+          418
+        ],
+        "area": 3333
+      },
+      "boxes": [
+        {
+          "line": 2,
+          "class": "cup",
+          "bbox": [
+            86.34,
+            357.91,
+            156.39,
+            418.36
+          ],
+          "iou": 0.982,
+          "mask_coverage": 1.0
+        }
+      ]
+    },
+    {
+      "image": "img_0053",
+      "type": "class_swap",
+      "types": [
+        "class_swap",
+        "category_swap"
+      ],
+      "size": [
+        480,
+        640
+      ],
+      "segment": {
+        "id": 11415760,
+        "class": "person",
+        "bbox": [
+          168,
+          172,
+          351,
+          476
+        ],
+        "area": 33108
+      },
+      "boxes": [
+        {
+          "line": 1,
+          "class": "baseball glove",
+          "bbox": [
+            167.6,
+            172.47,
+            351.41,
+            476.46
+          ],
+          "iou": 0.993,
+          "mask_coverage": 1.0
+        }
+      ]
+    },
+    {
+      "image": "img_0090",
+      "type": "bbox_drift",
+      "types": [
+        "bbox_drift"
+      ],
+      "size": [
+        600,
+        400
+      ],
+      "segment": {
+        "id": 15089200,
+        "class": "person",
+        "bbox": [
+          209,
+          0,
+          342,
+          203
+        ],
+        "area": 8482
+      },
+      "boxes": [
+        {
+          "line": 2,
+          "class": "person",
+          "bbox": [
+            221.65,
+            33.92,
+            350.14,
+            230.6
+          ],
+          "iou": 0.637,
+          "mask_coverage": 0.843
+        }
+      ]
+    },
+    {
+      "image": "img_0091",
+      "type": "class_swap",
+      "types": [
+        "class_swap",
+        "category_swap"
+      ],
+      "size": [
+        640,
+        427
+      ],
+      "segment": {
+        "id": 11080312,
+        "class": "cake",
+        "bbox": [
+          101,
+          27,
+          326,
+          301
+        ],
+        "area": 42548
+      },
+      "boxes": [
+        {
+          "line": 2,
+          "class": "donut",
+          "bbox": [
+            101.44,
+            26.93,
+            326.48,
+            301.02
+          ],
+          "iou": 0.996,
+          "mask_coverage": 1.0
+        }
+      ]
+    },
+    {
+      "image": "img_0096",
+      "type": "missing_box",
+      "types": [
+        "missing_box"
+      ],
+      "size": [
+        375,
+        500
+      ],
+      "segment": {
+        "id": 4434709,
+        "class": "oven",
+        "bbox": [
+          1,
+          147,
+          276,
+          497
+        ],
+        "area": 63647
+      },
+      "boxes": []
+    },
+    {
+      "image": "img_0220",
+      "type": "instance_merge",
+      "types": [
+        "instance_merge"
+      ],
+      "size": [
+        640,
+        361
+      ],
+      "segment": {
+        "id": 3660985,
+        "class": "person",
+        "bbox": [
+          437,
+          22,
+          496,
+          212
+        ],
+        "area": 2910
+      },
+      "boxes": [
+        {
+          "line": 18,
+          "class": "person",
+          "bbox": [
+            436.46,
+            112.6,
+            497.41,
+            211.95
+          ],
+          "iou": 0.514,
+          "mask_coverage": 0.787
+        },
+        {
+          "line": 22,
+          "class": "person",
+          "bbox": [
+            444.07,
+            21.89,
+            482.23,
+            58.76
+          ],
+          "iou": 0.125,
+          "mask_coverage": 0.213
+        }
+      ]
+    }
+  ]
+}

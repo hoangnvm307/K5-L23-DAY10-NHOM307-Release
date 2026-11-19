@@ -79,7 +79,6 @@ class Pair:
     segment: Segment
     iou: float
     coverage: float
-    segment_extent: float
     box_extent: float
 
 
@@ -206,7 +205,6 @@ def nearby_pairs(detections, segments):
                 detection, segment,
                 intersection / (detection.box.area + segment.box.area - intersection),
                 segment.pixels_in(detection.box) / segment.area,
-                intersection / segment.box.area,
                 intersection / detection.box.area,
             )
 

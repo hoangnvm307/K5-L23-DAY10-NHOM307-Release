@@ -1,0 +1,260 @@
+{
+  "candidates": [
+    {
+      "image": "000000000285",
+      "type": "bbox_drift",
+      "types": [
+        "bbox_drift"
+      ],
+      "size": [
+        586,
+        640
+      ],
+      "segment": {
+        "id": 5931152,
+        "class": "bear",
+        "bbox": [
+          1,
+          69,
+          586,
+          633
+        ],
+        "area": 275827
+      },
+      "boxes": [
+        {
+          "line": 1,
+          "class": "bear",
+          "bbox": [
+            100.87,
+            0.0,
+            586.0,
+            468.01
+          ],
+          "iou": 0.533,
+          "mask_coverage": 0.599
+        }
+      ]
+    },
+    {
+      "image": "000000001353",
+      "type": "bbox_drift",
+      "types": [
+        "bbox_drift"
+      ],
+      "size": [
+        375,
+        500
+      ],
+      "segment": {
+        "id": 988966,
+        "class": "person",
+        "bbox": [
+          62,
+          214,
+          179,
+          357
+        ],
+        "area": 10293
+      },
+      "boxes": [
+        {
+          "line": 5,
+          "class": "person",
+          "bbox": [
+            70.48,
+            185.61,
+            188.18,
+            329.73
+          ],
+          "iou": 0.594,
+          "mask_coverage": 0.843
+        }
+      ]
+    },
+    {
+      "image": "000000003501",
+      "type": "bbox_drift",
+      "types": [
+        "bbox_drift"
+      ],
+      "size": [
+        612,
+        612
+      ],
+      "segment": {
+        "id": 4096610,
+        "class": "broccoli",
+        "bbox": [
+          75,
+          68,
+          263,
+          361
+        ],
+        "area": 31169
+      },
+      "boxes": [
+        {
+          "line": 2,
+          "class": "broccoli",
+          "bbox": [
+            74.88,
+            174.24,
+            257.76,
+            361.44
+          ],
+          "iou": 0.618,
+          "mask_coverage": 0.702
+        }
+      ]
+    },
+    {
+      "image": "000000007818",
+      "type": "class_swap",
+      "types": [
+        "class_swap",
+        "category_swap"
+      ],
+      "size": [
+        640,
+        427
+      ],
+      "segment": {
+        "id": 4999232,
+        "class": "wine glass",
+        "bbox": [
+          400,
+          187,
+          443,
+          285
+        ],
+        "area": 2302
+      },
+      "boxes": [
+        {
+          "line": 3,
+          "class": "bowl",
+          "bbox": [
+            399.86,
+            187.2,
+            443.02,
+            284.73
+          ],
+          "iou": 0.992,
+          "mask_coverage": 1.0
+        }
+      ]
+    },
+    {
+      "image": "000000011511",
+      "type": "class_swap",
+      "types": [
+        "class_swap",
+        "category_swap"
+      ],
+      "size": [
+        640,
+        464
+      ],
+      "segment": {
+        "id": 5592404,
+        "class": "handbag",
+        "bbox": [
+          449,
+          261,
+          516,
+          364
+        ],
+        "area": 5181
+      },
+      "boxes": [
+        {
+          "line": 6,
+          "class": "backpack",
+          "bbox": [
+            448.82,
+            260.55,
+            516.39,
+            364.13
+          ],
+          "iou": 0.986,
+          "mask_coverage": 1.0
+        }
+      ]
+    },
+    {
+      "image": "000000015440",
+      "type": "class_swap",
+      "types": [
+        "class_swap",
+        "category_swap"
+      ],
+      "size": [
+        404,
+        640
+      ],
+      "segment": {
+        "id": 5860559,
+        "class": "book",
+        "bbox": [
+          116,
+          116,
+          229,
+          223
+        ],
+        "area": 9067
+      },
+      "boxes": [
+        {
+          "line": 1,
+          "class": "stop sign",
+          "bbox": [
+            116.14,
+            115.77,
+            229.32,
+            223.35
+          ],
+          "iou": 0.991,
+          "mask_coverage": 1.0
+        }
+      ]
+    },
+    {
+      "image": "000000016502",
+      "type": "class_swap",
+      "types": [
+        "class_swap",
+        "category_swap"
+      ],
+      "size": [
+        375,
+        500
+      ],
+      "segment": {
+        "id": 5792613,
+        "class": "sheep",
+        "bbox": [
+          75,
+          238,
+          184,
+          315
+        ],
+        "area": 4621
+      },
+      "boxes": [
+        {
+          "line": 1,
+          "class": "cow",
+          "bbox": [
+            75.23,
+            237.91,
+            183.65,
+            314.87
+          ],
+          "iou": 0.992,
+          "mask_coverage": 1.0
+        }
+      ]
+    }
+  ]
+}

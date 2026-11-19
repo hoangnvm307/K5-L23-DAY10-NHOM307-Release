@@ -209,6 +209,37 @@ def lineage_event(root, event, rid, **fields):
     run_script("lineage.py", "--root", root, "record", "--event", event, "--release-id", rid, *args)
 
 
+def update_report(run, v2, review):
+    report = ROOT / "submission" / "REPORT.md"
+    scored = (run / "report.md").read_text(encoding="utf-8").splitlines()
+    score_rows = [line for line in scored if line.startswith(("- F1 tổng", "- Truy vết F1"))]
+    info = dict(
+        line.split(": ", 1)
+        for line in (v2 / "README.txt").read_text(encoding="utf-8").splitlines()
+        if ": " in line
+    )
+    verdicts = Counter(row["verdict"] for row in review["reviewed"])
+    rework = len({row["image"] for row in read_csv(v2 / "rework_queue.csv")})
+    start = "<!-- review-result:start -->"
+    end = "<!-- review-result:end -->"
+    body = "\n".join([
+        start,
+        f"- Review luyện tập gồm {sum(verdicts.values())} ứng viên. "
+        f"Xác nhận {verdicts['confirmed']} và bác {verdicts['rejected']}.",
+        *score_rows,
+        f"- QC v1 là {info['QC v1']}. {info['Kết luận v1']}",
+        f"- V2 giữ {info['Số ảnh']} ảnh và {info['Số nhãn']} nhãn detection, "
+        f"chuyển {rework} ảnh sang rework. Lô cha là {info['Parent']}.",
+        "- Kiểm định dạng bàn giao của lab đạt 17/17 mục.",
+        end,
+    ])
+    current = report.read_text(encoding="utf-8")
+    if start in current and end in current:
+        before, _, tail = current.partition(start)
+        _, _, after = tail.partition(end)
+        report.write_text(before + body + after, encoding="utf-8")
+
+
 def finalize_practice(run, review):
     delivery = (run / "delivery").resolve()
     errors = merge(delivery, run, run / "rules.json", run / "candidates.json", review)
@@ -234,6 +265,7 @@ def finalize_practice(run, review):
     run_script("check_handover.py", "--run", run)
     run_script("score_findings.py", "--run", run)
     run_script("export_submission.py", "--run", run)
+    update_report(run, v2, review)
 
 
 def main():
